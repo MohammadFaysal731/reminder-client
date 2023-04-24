@@ -1,21 +1,47 @@
 import React from "react";
+import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
+import { AiOutlineUser } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
-
+import { auth } from "../firebase.init";
 const Header = () => {
+  const [user] = useAuthState(auth);
+  const [signOut] = useSignOut(auth);
   const menuItems = (
     <>
-      <li className="mx-2">
+      <li className="md:mx-2 my-2 ">
         <NavLink to="/add-item">Add Items</NavLink>
       </li>
-      <li className="mx-2">
+      <li className="md:mx-2 my-2">
         <NavLink to="/manage-items">Manage Items</NavLink>
       </li>
-      <li className="mx-2">
+      <li className="md:mx-2 my-2">
         <NavLink to="/items">Items</NavLink>
       </li>
-      <li className="mx-2">
-        <NavLink to="/login">Login</NavLink>
-      </li>
+      {user ? (
+        <>
+          <li className="md:mx-2 my-2">
+            <span className="">
+              {user?.displayName ? (
+                <span className="border border-primary p-2 rounded-lg">
+                  {user?.displayName?.slice(0, 2)}
+                </span>
+              ) : (
+                <AiOutlineUser />
+              )}
+            </span>
+            
+          </li>
+          <li>
+            <label onClick={signOut} className="text-secondary font-bold">
+              Logout
+            </label>
+          </li>
+        </>
+      ) : (
+        <li className="md:mx-2 my-2">
+          <NavLink to="/login">Login</NavLink>
+        </li>
+      )}
     </>
   );
   return (
@@ -41,12 +67,12 @@ const Header = () => {
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100  w-52"
             >
               {menuItems}
             </ul>
           </div>
-          <Link to="/" className="btn btn-ghost normal-case text-xl">
+          <Link to="/" className="normal-case text-xl">
             Reminder App
           </Link>
         </div>
