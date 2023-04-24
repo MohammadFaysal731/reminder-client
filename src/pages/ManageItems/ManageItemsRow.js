@@ -1,8 +1,20 @@
 import React from "react";
+import { toast } from "react-toastify";
 
 const ManageItemsRow = ({ items, index, refetch, setDeletedItem }) => {
-  const { name, date, time, image } = items;
-
+  const { _id, name, date, time, image, mark } = items;
+  const handleMark = (id) => {
+    fetch(`http://localhost:5000/item/${id}`, {
+      method: "PUT",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          refetch();
+          toast.success(`You will mark this ${name}`);
+        }
+      });
+  };
   return (
     <tr className="font-bold">
       <td>{index + 1}</td>
@@ -13,16 +25,27 @@ const ManageItemsRow = ({ items, index, refetch, setDeletedItem }) => {
       <td>{date}</td>
       <td>{time}</td>
       <td>
-        <button className="btn btn-primary btn-xs">Mark</button>
+        {mark ? (
+          <button className="text-secondary">Remove</button>
+        ) : (
+          <button
+            onClick={() => handleMark(_id)}
+            className="btn btn-primary btn-xs"
+          >
+            Mark
+          </button>
+        )}
       </td>
       <td>
-        <label
-          onClick={() => setDeletedItem(items)}
-          htmlFor="item-delete-modal"
-          className="btn btn-secondary btn-xs"
-        >
-          Delete
-        </label>
+        {!mark &&
+          <label
+            onClick={() => setDeletedItem(items)}
+            htmlFor="item-delete-modal"
+            className="btn btn-secondary btn-xs"
+          >
+            Delete
+          </label>}
+        
       </td>
     </tr>
   );
