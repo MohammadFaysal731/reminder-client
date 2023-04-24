@@ -1,20 +1,52 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import SocialLogin from '../components/SocialLogin';
+import React from "react";
+import {
+  useCreateUserWithEmailAndPassword,
+  useUpdateProfile,
+} from "react-firebase-hooks/auth";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
+import SocialLogin from "../components/SocialLogin";
+import { auth } from "../firebase.init";
 
 const Registration = () => {
-    const {
-      register,
-      formState: { errors },
-      handleSubmit,
-    } = useForm();
-   const onSubmit = (data) => {
-     const name = data.name;
-     const email = data.email;
-     const password = data.password;
-     console.log(name,email, password);
-   };
+  const [
+    createUserWithEmailAndPassword,
+    emailUser,
+    emailUserLoading,
+    emailUserError,
+  ] = useCreateUserWithEmailAndPassword(auth);
+  const [updateProfile, updating, updatingError] = useUpdateProfile(auth);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  let errorElement;
+  const navigate = useNavigate();
+  if (emailUser) {
+    navigate("/items");
+  }
+  if (emailUserLoading || updating) {
+    return <Loading />;
+  }
+  if (emailUserError || updatingError) {
+    errorElement = (
+      <small className="m-2 text-center text-red-500 text-lg">
+        {emailUserError?.message}
+      </small>
+    );
+  }
+  const onSubmit = async (data) => {
+    const name = data.name;
+    const email = data.email;
+    const password = data.password;
+    await createUserWithEmailAndPassword(email, password);
+    const success = await updateProfile({ displayName: name });
+    if (success) {
+      alert("Updated profile");
+    }
+  };
   return (
     <div className="max-w-7xl mx-auto p-10">
       <div className="max-w-7xl mx-auto p-5">
@@ -79,8 +111,10 @@ const Registration = () => {
                 {errors?.password?.type === "required" && (
                   <p className="text-red-500">{errors?.password?.message}</p>
                 )}
-              </label>
+              </label> 
+              {errorElement}
             </div>
+           
             <button className="btn btn-primary">Registration</button>
           </form>
           <p>
@@ -90,7 +124,7 @@ const Registration = () => {
             </span>
           </p>
         </div>
-        <SocialLogin/>
+        <SocialLogin />
       </div>
     </div>
   );

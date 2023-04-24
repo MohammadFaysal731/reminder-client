@@ -1,17 +1,38 @@
 import React from 'react';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Loading from '../components/Loading';
 import SocialLogin from '../components/SocialLogin';
+import { auth } from '../firebase.init';
 
-const Login = () => {  const {
+const Login = () => { 
+  const [signInWithEmailAndPassword, emailUser, emailUserLoading, emailUserError] =
+  useSignInWithEmailAndPassword(auth);
+   const {
   register,
   formState: { errors },
   handleSubmit,
 } = useForm();
+let errorElement;
+const navigate = useNavigate();
+if (emailUser) {
+  navigate("/items");
+}
+if (emailUserLoading ) {
+  return <Loading />;
+}
+if (emailUserError) {
+  errorElement = (
+    <small className="m-2 text-center text-red-500 text-lg">
+      {emailUserError?.message}
+    </small>
+  );
+}
 const onSubmit = (data) => {
   const email = data.email;
   const password = data.password;
-  console.log(email,password );
+  signInWithEmailAndPassword(email, password);
 };
   return (
     <div className="max-w-7xl mx-auto p-10">
@@ -58,8 +79,11 @@ const onSubmit = (data) => {
                   <p className="text-red-500">{errors?.password?.message}</p>
                 )}
               </label>
+              {errorElement} 
             </div>
-            <button className="btn btn-primary">Login</button>
+         
+             <button className="btn btn-primary">Login</button>
+             
           </form>
           <p>
             Are you new to Reminder App ? &nbsp;
@@ -68,7 +92,7 @@ const onSubmit = (data) => {
             </span>
           </p>
         </div>
-        <SocialLogin/>
+        <SocialLogin />
       </div>
     </div>
   );

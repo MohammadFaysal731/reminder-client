@@ -26,7 +26,7 @@ const Header = () => {
                   {user?.displayName?.slice(0, 2)}
                 </span>
               ) : (
-                <AiOutlineUser />
+                <AiOutlineUser  className="text-3xl"/>
               )}
             </span>
             
