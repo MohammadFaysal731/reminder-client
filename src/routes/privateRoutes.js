@@ -1,7 +1,7 @@
 import AddItem from "../pages/AddItem";
 import Home from "../pages/Home/Home";
 import Items from "../pages/Items";
-import ManageItems from "../pages/ManageItems";
+import ManageItems from "../pages/ManageItems/ManageItems";
 import NotFound from "../pages/NotFound";
 
 export const privateRoutes = [
