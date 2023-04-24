@@ -23,7 +23,7 @@ const DeleteItemModal = ({ deletedItem, setDeletedItem, refetch }) => {
       <div className="modal sm:modal-middle">
         <div className="modal-box">
           <h3 className="font-bold text-lg">
-            Do you want to Delete : - This{" "}
+            Do you want to Delete This : - 
             <span className="text-primary">{name}</span>
           </h3>
           <p></p>
