@@ -1,21 +1,8 @@
-import React from 'react';
-import { toast } from 'react-toastify';
+import React from "react";
 
-const ManageItemsRow = ({ items, index, refetch }) => {
-  const { _id, name, date, time, image } = items;
+const ManageItemsRow = ({ items, index, refetch, setDeletedItem }) => {
+  const { name, date, time, image } = items;
 
-  const handleDeleteItem = (id) => {
-    fetch(`http://localhost:5000/item/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount > 0) {
-          refetch()
-          toast.success(`Successfully delete this ${name}`);
-        }
-      });
-  };
   return (
     <tr className="font-bold">
       <td>{index + 1}</td>
@@ -29,12 +16,13 @@ const ManageItemsRow = ({ items, index, refetch }) => {
         <button className="btn btn-primary btn-xs">Mark</button>
       </td>
       <td>
-        <button
-          onClick={() => handleDeleteItem(_id)}
+        <label
+          onClick={() => setDeletedItem(items)}
+          htmlFor="item-delete-modal"
           className="btn btn-secondary btn-xs"
         >
           Delete
-        </button>
+        </label>
       </td>
     </tr>
   );

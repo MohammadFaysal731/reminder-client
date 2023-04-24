@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import Loading from "../../components/Loading";
+import DeleteItemModal from "../../components/Modals/DeleteItemModal";
 import ManageItemsRow from "./ManageItemsRow";
 
 const ManageItems = () => {
-
+ const [deletedItem, setDeletedItem] = useState(null);
  const { data: allItems, isLoading, refetch } = useQuery({
    queryKey: ["allItems"],
    queryFn: () =>
@@ -41,11 +42,19 @@ const ManageItems = () => {
                 key={items._id}
                 index={index}
                 refetch={refetch}
+                setDeletedItem={setDeletedItem}
               />
             ))}
           </tbody>
         </table>
       </div>
+      {deletedItem && (
+        <DeleteItemModal
+          deletedItem={deletedItem}
+          setDeletedItem={setDeletedItem}
+          refetch={refetch}
+        />
+      )}
     </div>
   );
 };
