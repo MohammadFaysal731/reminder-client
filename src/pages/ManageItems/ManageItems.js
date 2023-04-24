@@ -8,10 +8,16 @@ import ManageItemsRow from "./ManageItemsRow";
 const ManageItems = () => {
  const [deletedItem, setDeletedItem] = useState(null);
  const [markingItem, setMarkingItem] = useState(null);
- const { data: allItems, isLoading, refetch } = useQuery({
+ const {
+   data: allItems,
+   isLoading,
+   refetch,
+ } = useQuery({
    queryKey: ["allItems"],
    queryFn: () =>
-     fetch("http://localhost:5000/items").then((res) => res.json()),
+     fetch("https://different-yak-shoe.cyclic.app/items").then((res) =>
+       res.json()
+     ),
  });
 
  if (isLoading){

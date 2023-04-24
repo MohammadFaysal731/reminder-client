@@ -4,14 +4,14 @@ import { toast } from 'react-toastify';
 const DeleteItemModal = ({ deletedItem, setDeletedItem, refetch }) => {
   const { _id, name } = deletedItem;
   const handleDeleteItem = (id) => {
-    fetch(`http://localhost:5000/item/${id}`, {
+    fetch(`https://different-yak-shoe.cyclic.app/item/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.deletedCount > 0) {
           refetch();
-          setDeletedItem(null)
+          setDeletedItem(null);
           toast.success(`Successfully delete this ${name}`);
         }
       });

@@ -4,14 +4,14 @@ import { toast } from 'react-toastify';
 const MarkItemModal = ({ markingItem, refetch, setMarkingItem }) => {
   const { _id, name } = markingItem;
   const handleMark = (id) => {
-    fetch(`http://localhost:5000/item/${id}`, {
+    fetch(`https://different-yak-shoe.cyclic.app/item/${id}`, {
       method: "PUT",
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
           refetch();
-          setMarkingItem(null)
+          setMarkingItem(null);
           toast.success(`You will mark this ${name}`);
         }
       });

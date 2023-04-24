@@ -11,14 +11,14 @@ const ManageItemsRow = ({
   const { _id, name, date, time, image, mark } = items;
  
   const handleRemoveMark = id =>{
-    fetch(`http://localhost:5000/item/${id}`, {
+    fetch(`https://different-yak-shoe.cyclic.app/item/${id}`, {
       method: "PATCH",
     })
       .then((res) => res.json())
       .then((data) => {
-        if(data.modifiedCount > 0){
+        if (data.modifiedCount > 0) {
           refetch();
-          toast.success(`Successfully remove the mark on ${name}`)
+          toast.success(`Successfully remove the mark on ${name}`);
         }
       });
   }

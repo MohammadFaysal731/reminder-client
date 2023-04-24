@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { FcGoogle } from "react-icons/fc";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../firebase.init";
 import Loading from "./Loading";
@@ -26,6 +27,7 @@ const SocialLogin = () => {
       <div className="divider">OR</div>
       {errorElement}
       <button onClick={() => signInWithGoogle()} className="btn btn-primary ">
+        <FcGoogle className="text-3xl mx-2"/>
         Continue With Google
       </button>
     </div>
