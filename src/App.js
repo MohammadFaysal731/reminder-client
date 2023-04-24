@@ -1,29 +1,32 @@
 import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import AddItem from "./pages/AddItem";
-import Home from "./pages/Home/Home";
-import Items from "./pages/Items";
-import Login from "./pages/Login";
-import ManageItems from "./pages/ManageItems";
-import NotFound from "./pages/NotFound";
-import Registration from "./pages/Registration";
+import RequireAuth from "./components/RequireAuth";
+import { privateRoutes } from "./routes/privateRoutes";
+import { publicRoutes } from "./routes/publicRoutes";
 
 
 function App() {
   return (
     <>
-      <Header/>
+      <Header />
       <Routes>
-        <Route path="/"element={ <Home/>}/>
-        <Route path="/add-item"element={ <AddItem/>}/>
-        <Route path="/items"element={ <Items/>}/>
-        <Route path="/manage-items"element={ <ManageItems/>}/>
-        <Route path="/registration"element={ <Registration/>}/>
-        <Route path="/login"element={ <Login/>}/>
-        <Route path="*"element={ <NotFound/>}/>
+        {publicRoutes?.map(({ path, Comment }, index) => (
+          <Route path={path} element={<Comment />} key={index} />
+        ))}
+        {privateRoutes?.map(({ path, Comment }, index) => (
+          <Route
+            path={path}
+            element={
+              <RequireAuth>
+                <Comment />
+              </RequireAuth>
+            }
+            key={index}
+          />
+        ))}
       </Routes>
-      <Footer/>
+      <Footer />
     </>
   );
 }

@@ -8,15 +8,16 @@ const Header = () => {
   const [signOut] = useSignOut(auth);
   const menuItems = (
     <>
-      <li className="md:mx-2 my-2 ">
-        <NavLink to="/add-item">Add Items</NavLink>
-      </li>
-      <li className="md:mx-2 my-2">
-        <NavLink to="/manage-items">Manage Items</NavLink>
-      </li>
-      <li className="md:mx-2 my-2">
-        <NavLink to="/items">Items</NavLink>
-      </li>
+      {user && (
+        <>
+          <li className="md:mx-2 my-2">
+            <NavLink to="/manage-items">Manage Items</NavLink>
+          </li>
+          <li className="md:mx-2 my-2">
+            <NavLink to="/items">Items</NavLink>
+          </li>
+        </>
+      )}
       {user ? (
         <>
           <li className="md:mx-2 my-2">
@@ -26,10 +27,9 @@ const Header = () => {
                   {user?.displayName?.slice(0, 2)}
                 </span>
               ) : (
-                <AiOutlineUser  className="text-3xl"/>
+                <AiOutlineUser className="text-3xl" />
               )}
             </span>
-            
           </li>
           <li>
             <label onClick={signOut} className="text-secondary font-bold">

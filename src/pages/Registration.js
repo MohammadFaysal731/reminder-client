@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
@@ -22,11 +22,14 @@ const Registration = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  let errorElement;
-  const navigate = useNavigate();
-  if (emailUser) {
-    navigate("/items");
-  }
+ let errorElement;
+ const navigate = useNavigate();
+
+ useEffect(() => {
+   if (emailUser) {
+     navigate("/");
+   }
+ }, [emailUser, navigate]);
   if (emailUserLoading || updating) {
     return <Loading />;
   }

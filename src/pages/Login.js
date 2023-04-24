@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import SocialLogin from '../components/SocialLogin';
 import { auth } from '../firebase.init';
@@ -16,9 +16,14 @@ const Login = () => {
 } = useForm();
 let errorElement;
 const navigate = useNavigate();
-if (emailUser) {
-  navigate("/items");
+const location =useLocation();
+const from = location.state?.from.pathname ||"/"
+useEffect(()=>{
+  if (emailUser) {
+  navigate(from,{replace:true});
 }
+},[emailUser,navigate,from])
+
 if (emailUserLoading ) {
   return <Loading />;
 }
