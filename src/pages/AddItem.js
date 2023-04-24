@@ -1,18 +1,59 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const AddItem = () => {  
   const {
   register,
   formState: { errors },
   handleSubmit,
+  reset
 } = useForm();
+const imgBbStorageKey = `45c46a1b32a1d6a38d670e42fa5d2349`;
 const onSubmit = (data) => {
   const name =data.name;
   const date =data.date;
   const time =data.time;
-  const image =data.image;
-  console.log(name,date,time,image);
+  //hos image to imgbb 
+  const image =data.image[0];
+  const formData = new FormData();
+  formData.append("image",image);
+  const url = `https://api.imgbb.com/1/upload?key=${imgBbStorageKey}`;
+  fetch(url,{
+    method:"POST",
+    body:formData
+  })
+  .then(res =>res.json())
+  .then(data => {
+    if(data.success){
+      const image = data.data.url;
+      // send the data to mongodb
+      const itemData = {
+        name,
+        date,
+        time,
+        image,
+      };
+      fetch(`http://localhost:5000/items`,{
+        method:"POST",
+        headers:{
+          "content-type":"application/json"
+        },
+        body:JSON.stringify(itemData)
+      })
+      .then(res =>res.json())
+      .then(result =>{
+       if (result.insertedId){
+          reset()
+          toast.success(`you will add ${name} item`)
+       }
+       else{
+        toast.error(`you item ${name} was not added`);
+       }
+      })
+
+    }
+  })
 };
   return (
     <div className="max-w-7xl mx-auto p-5">
