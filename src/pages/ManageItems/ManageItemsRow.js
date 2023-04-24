@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 
 const ManageItemsRow = ({
   items,
@@ -7,8 +8,20 @@ const ManageItemsRow = ({
   setDeletedItem,
   setMarkingItem,
 }) => {
-  const {  name, date, time, image, mark } = items;
+  const { _id, name, date, time, image, mark } = items;
  
+  const handleRemoveMark = id =>{
+    fetch(`http://localhost:5000/item/${id}`, {
+      method: "PATCH",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if(data.modifiedCount > 0){
+          refetch();
+          toast.success(`Successfully remove the mark on ${name}`)
+        }
+      });
+  }
   return (
     <tr className="font-bold">
       <td>{index + 1}</td>
@@ -20,7 +33,7 @@ const ManageItemsRow = ({
       <td>{time}</td>
       <td>
         {mark ? (
-          <button className="text-secondary">Remove</button>
+          <button onClick={()=>handleRemoveMark(_id)} className="text-secondary">Remove</button>
         ) : (
           <label
             onClick={() => setMarkingItem(items)}
