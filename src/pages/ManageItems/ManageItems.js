@@ -1,13 +1,26 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import useItems from "../../hooks/useItems";
-import ItemsRow from "./ItemsRow";
+import Loading from "../../components/Loading";
+import ManageItemsRow from "./ManageItemsRow";
 
 const ManageItems = () => {
-  const {items, setItems}=useItems([]);
+
+ const { data: allItems, isLoading, refetch } = useQuery({
+   queryKey: ["allItems"],
+   queryFn: () =>
+     fetch("http://localhost:5000/items").then((res) => res.json()),
+ });
+
+ if (isLoading){
+  return <Loading/>
+ }
+
 
   return (
     <div className="max-w-7xl mx-auto p-5">
-      <h2 className="text-center text-primary font-bold text-sm md:text-2xl uppercase mb-3">All Items</h2>
+      <h2 className="text-center text-primary font-bold text-sm md:text-2xl uppercase mb-3">
+        All Items
+      </h2>
       <div className="overflow-x-auto w-full">
         <table className="table w-full">
           <thead>
@@ -22,9 +35,14 @@ const ManageItems = () => {
             </tr>
           </thead>
           <tbody>
-         {items?.map((item,index)=>(
-          <ItemsRow item={item} key={item._id} index={index}/>
-         ))}
+            {allItems?.map((items, index) => (
+              <ManageItemsRow
+                items={items}
+                key={items._id}
+                index={index}
+                refetch={refetch}
+              />
+            ))}
           </tbody>
         </table>
       </div>
